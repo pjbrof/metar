@@ -44,26 +44,21 @@
 
 // initialize the library by associating any needed LCD interface pin
 // with the arduino pin number it is connected to
-const int rs = 12, en = 11, d4 = 5, d5 = 4, d6 = 3, d7 = 2;
+const int rs = 15, en = 2, d4 = 4, d5 = 5, d6 = 18, d7 = 19;
 LiquidCrystal lcd(rs, en, d4, d5, d6, d7);
 
-String message = "KBED 161751Z 28010G22KT 10SM FEW080 18/0";
+String message = "Hello nerds";
 int messageLength = message.length();
 
 void setup() {
+  Serial.begin(115200);
+  while (!Serial) { delay(100); }
   // set up the LCD's number of columns and rows:
-  lcd.begin(16, 2);
+  // lcd.begin(16, 2);
   // Print a message to the LCD.
   lcd.print(message);
   delay(3000);
 }
 
 void loop() {
-  // scroll 16 positions (string length) to the left
-  for (int positionCounter = 0; positionCounter < 16; positionCounter++) {
-    lcd.scrollDisplayLeft();
-    delay(300);
-  }
-  
-  delay(3000);
 }
