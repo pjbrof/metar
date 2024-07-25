@@ -8,3 +8,6 @@ This ended up being too much of a headache due to the secure connection over por
 
 If the node server isnt working and want to directly hit .gov api with esp will need secure client
 https://www.youtube.com/watch?v=HUjFMVOpXBM
+
+millis explaination
+https://forum.arduino.cc/t/using-millis-for-timing-a-beginners-guide/483573/2
