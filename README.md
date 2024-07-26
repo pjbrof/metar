@@ -14,3 +14,9 @@ https://forum.arduino.cc/t/using-millis-for-timing-a-beginners-guide/483573/2
 
 METAR Help
 https://weather.cod.edu/notes/metar.html#time
+
+# Docker Start
+
+`docker build -t metar:latest .`
+
+`docker run -d -p 3000:3000 metar:latest`
