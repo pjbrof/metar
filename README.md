@@ -20,3 +20,16 @@ https://weather.cod.edu/notes/metar.html#time
 `docker build -t metar:latest .`
 
 `docker run -d -p 3000:3000 metar:latest`
+
+# Docker Private Repo
+
+`docker run -d -p 5000:5000 registry`
+
+`docker login <REGISTRY_HOST>:<REGISTRY_PORT>`
+`docker tag <IMAGE_ID> <REGISTRY_HOST>:<REGISTRY_PORT>/<APPNAME>:<APPVERSION>`
+`docker push <REGISTRY_HOST>:<REGISTRY_PORT>/<APPNAME>:<APPVERSION>`
+
+Add to Docker daemon from pushing device
+`"insecure-registries": ["<<REGISTRY_HOST>:<REGISTRY_PORT>"]`
+
+TODO: find out how to use SSL and then expose port
