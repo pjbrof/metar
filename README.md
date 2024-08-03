@@ -25,9 +25,19 @@ https://weather.cod.edu/notes/metar.html#time
 
 `docker run -d -p 5000:5000 registry`
 
+On build machine: (login not required when insecure http)
+
+`docker build --platform linux/arm/v6 -t metar:latest .`
+NOTE: --no-audit needed for Node but in arm based devices
+
 `docker login <REGISTRY_HOST>:<REGISTRY_PORT>`
 `docker tag <IMAGE_ID> <REGISTRY_HOST>:<REGISTRY_PORT>/<APPNAME>:<APPVERSION>`
 `docker push <REGISTRY_HOST>:<REGISTRY_PORT>/<APPNAME>:<APPVERSION>`
+
+On host machine:
+`docker pull <REGISTRY_HOST>:<REGISTRY_PORT>/<APPNAME>:<APPVERSION>`
+
+`docker run -d -p 3000:3000 <REGISTRY_HOST>:<REGISTRY_PORT>/<APPNAME>:<APPVERSION>`
 
 Add to Docker daemon from pushing device
 `"insecure-registries": ["<<REGISTRY_HOST>:<REGISTRY_PORT>"]`
