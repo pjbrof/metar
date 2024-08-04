@@ -19,7 +19,7 @@ const char* ssid = "Winter Chill Gang";
 const char* password = "heavyhitters";
 
 // Would need WiFiClientSecure to call directly so using node server as a passthrough
-const char* serverName = "http://192.168.1.10:3000";
+const char* serverName = "http://192.168.1.22:3000";
 
 // the following variables are unsigned longs because the time, measured in
 // milliseconds, will quickly become a bigger number than can be stored in an int.
@@ -31,6 +31,7 @@ const unsigned long blinkPeriod = 100;
 const unsigned long timerDelay = 600000; // 10 minutes
 
 String metar;
+static int bufferOffset = 6;
 
 int x = matrix.width();
 int pass = 0;
@@ -101,7 +102,9 @@ void matrixStep()
     matrix.fillScreen(0);
     matrix.setCursor(x, 0);
     matrix.print(metar);
-    if(--x < -300) {
+
+    int bufferSize = 0 - (metar.length() * bufferOffset);
+    if(--x < bufferSize) {
       x = matrix.width();
       if(++pass >= 3) pass = 0;
     }
