@@ -37,7 +37,7 @@ NOTE: --no-audit needed for Node but in arm based devices
 On host machine:
 `docker pull <REGISTRY_HOST>:<REGISTRY_PORT>/<APPNAME>:<APPVERSION>`
 
-`docker run -d -p 3000:3000 <REGISTRY_HOST>:<REGISTRY_PORT>/<APPNAME>:<APPVERSION>`
+`docker run -d -p 3000:3000 --env-file .env <REGISTRY_HOST>:<REGISTRY_PORT>/<APPNAME>:<APPVERSION>`
 
 Add to Docker daemon from pushing device
 `"insecure-registries": ["<<REGISTRY_HOST>:<REGISTRY_PORT>"]`
