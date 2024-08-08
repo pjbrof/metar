@@ -10,7 +10,7 @@
 
 #define PIN 2
 
-Adafruit_NeoMatrix matrix = Adafruit_NeoMatrix(64, 8, PIN,
+Adafruit_NeoMatrix matrix = Adafruit_NeoMatrix(96, 8, PIN,
   NEO_MATRIX_TOP     + NEO_MATRIX_LEFT +
   NEO_MATRIX_COLUMNS + NEO_MATRIX_ZIGZAG,
   NEO_RGB            + NEO_KHZ800);
