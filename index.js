@@ -18,7 +18,7 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-const notifyRunwayInUse = async () => {
+const notifyRunwayInUseEmail = async () => {
   const currentWx = await getCurrentWxJSON();
   if (currentWx.wdir >= 70 && currentWx.wdir <= 160) {
     transporter.sendMail(
@@ -36,6 +36,20 @@ const notifyRunwayInUse = async () => {
         }
       }
     );
+  }
+};
+
+const notifyRunwayInUseNtfy = async () => {
+  const currentWx = await getCurrentWxJSON();
+  if (currentWx.wdir >= 70 && currentWx.wdir <= 160) {
+    try {
+      fetch("http://192.168.1.13/activerunway", {
+        method: "POST",
+        body: `Runway 11 in use 🛫 \n${currentWx.rawOb}`,
+      });
+    } catch (error) {
+      console.log("Notification error: ", error);
+    }
   }
 };
 
@@ -65,5 +79,5 @@ app.listen(port, () => {
 });
 
 cron.schedule("*/30 * * * *", async () => {
-  await notifyRunwayInUse();
+  await notifyRunwayInUseNtfy();
 });
