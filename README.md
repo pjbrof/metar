@@ -19,7 +19,7 @@ https://weather.cod.edu/notes/metar.html#time
 
 `docker build -t metar:latest .`
 
-`docker run -d -p 3000:3000 metar:latest`
+`docker run -d -p 3000:3000 -e .env metar:latest`
 
 # Docker Private Repo
 
@@ -35,6 +35,7 @@ NOTE: --no-audit needed for Node but in arm based devices
 `docker push <REGISTRY_HOST>:<REGISTRY_PORT>/<APPNAME>:<APPVERSION>`
 
 On host machine:
+NOTE: use 'localhost' for registry host here
 `docker pull <REGISTRY_HOST>:<REGISTRY_PORT>/<APPNAME>:<APPVERSION>`
 
 `docker run -d -p 3000:3000 --env-file .env <REGISTRY_HOST>:<REGISTRY_PORT>/<APPNAME>:<APPVERSION>`

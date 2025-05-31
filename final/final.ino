@@ -19,7 +19,7 @@ const char* ssid = "Winter Chill Gang";
 const char* password = "heavyhitters";
 
 // Would need WiFiClientSecure to call directly so using node server as a passthrough
-const char* serverName = "http://192.168.1.22:3000";
+const char* serverName = "http://192.168.1.45:3000";
 
 // the following variables are unsigned longs because the time, measured in
 // milliseconds, will quickly become a bigger number than can be stored in an int.

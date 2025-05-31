@@ -1,51 +1,35 @@
 require("dotenv").config();
 const express = require("express");
 const cron = require("node-cron");
-const nodemailer = require("nodemailer");
+const dayjs = require("dayjs");
+const utc = require("dayjs/plugin/utc");
+
+dayjs.extend(utc);
 
 const app = express();
 const port = 3000;
-
-const transporter = nodemailer.createTransport({
-  host: "smtp.mailgun.org",
-  port: 587,
-  secure: false, // use SSL
-  auth: {
-    user: process.env.MAILGUN_USER,
-    pass: process.env.MAILGUN_PASS,
-    api_key: process.env.MAILGUN_DOMAIN,
-    domain: process.env.MAILGUN_API_KEY,
-  },
-});
-
-const notifyRunwayInUseEmail = async () => {
-  const currentWx = await getCurrentWxJSON();
-  if (currentWx.wdir >= 70 && currentWx.wdir <= 160) {
-    transporter.sendMail(
-      {
-        from: process.env.MAILGUN_USER,
-        to: process.env.SEND_TO_EMAIL,
-        subject: "Runway 11 in use",
-        text: currentWx.rawOb,
-      },
-      (error, info) => {
-        if (error) {
-          console.log(error);
-        } else {
-          console.log("Email sent: " + info.response);
-        }
-      }
-    );
-  }
-};
 
 const notifyRunwayInUseNtfy = async () => {
   const currentWx = await getCurrentWxJSON();
   if (currentWx.wdir >= 70 && currentWx.wdir <= 160) {
     try {
-      fetch("http://192.168.1.13/activerunway", {
+      fetch(`http://${process.env.HOST_IP}/activerunway`, {
         method: "POST",
         body: `Runway 11 in use 🛫 \n${currentWx.rawOb}`,
+      });
+    } catch (error) {
+      console.log("Notification error: ", error);
+    }
+  }
+};
+
+const notifyGameDayNtfy = async () => {
+  const game = await getGameday();
+  if (game) {
+    try {
+      fetch(`http://${process.env.HOST_IP}/gameday`, {
+        method: "POST",
+        body: `Red Sox ${game}`,
       });
     } catch (error) {
       console.log("Notification error: ", error);
@@ -69,9 +53,38 @@ const getCurrentWxJSON = async () => {
   return wx[0];
 };
 
+const getGameday = async () => {
+  const today = dayjs().format("YYYY-MM-DD");
+  const res = await fetch(
+    `https://statsapi.mlb.com/api/v1/schedule?hydrate=team&sportId=1&startDate=${today}&endDate=${today}&teamId=111`
+  );
+  const teamData = await res.json();
+
+  if (teamData.totalGames >= 1) {
+    const game = teamData.dates[0].games[0];
+    const gameTime = dayjs(game.gameDate).local().format("hh:mm A");
+    let opponent = "";
+
+    if (game.teams.away.team.teamCode !== "bos") {
+      opponent = `VS ${game.teams.away.team.teamName.toUpperCase()}`;
+    } else {
+      opponent = `AT ${game.teams.home.team.teamName.toUpperCase()}`;
+    }
+
+    return `${opponent} ${gameTime}`;
+  } else {
+    return "NO GAME TODAY";
+  }
+};
+
 app.get("/", async (_, res) => {
   const wx = await getCurrentWxRaw();
   res.send(wx);
+});
+
+app.get("/sox", async (_, res) => {
+  const game = await getGameday();
+  res.send(game);
 });
 
 app.listen(port, () => {
@@ -80,4 +93,8 @@ app.listen(port, () => {
 
 cron.schedule("*/30 * * * *", async () => {
   await notifyRunwayInUseNtfy();
+});
+
+cron.schedule("0 6 * * *", async () => {
+  await notifyGameDayNtfy();
 });
