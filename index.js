@@ -2,9 +2,6 @@ require("dotenv").config();
 const express = require("express");
 const cron = require("node-cron");
 const dayjs = require("dayjs");
-const utc = require("dayjs/plugin/utc");
-
-dayjs.extend(utc);
 
 const app = express();
 const port = 3000;
@@ -62,7 +59,9 @@ const getGameday = async () => {
 
   if (teamData.totalGames >= 1) {
     const game = teamData.dates[0].games[0];
-    const gameTime = dayjs(game.gameDate).local().format("hh:mm A");
+    // NOTE: dayjs.local() is not working despite the host machine and container having the correct time.
+    // Also tried explicitly setting the timezone with no luck. Since baseball season is always EDT there shouldnt be an issue here.
+    const gameTime = dayjs(game.gameDate).subtract(4, "hour").format("hh:mm A");
     let opponent = "";
 
     if (game.teams.away.team.teamCode !== "bos") {
