@@ -6,14 +6,31 @@ const dayjs = require("dayjs");
 const app = express();
 const port = 3000;
 
+app.set("view engine", "ejs");
+
+let todaysFlights;
+let todaysGame = "";
+let onceFlag = false;
+
 const notifyRunwayInUseNtfy = async () => {
   const currentWx = await getCurrentWxJSON();
-  if (currentWx.wdir >= 70 && currentWx.wdir <= 160) {
+  if (currentWx.wdir >= 70 && currentWx.wdir <= 160 && !onceFlag) {
     try {
       fetch(`http://${process.env.HOST_IP}/activerunway`, {
         method: "POST",
         body: `Runway 11 in use 🛫 \n${currentWx.rawOb}`,
       });
+      onceFlag = true;
+    } catch (error) {
+      console.log("Notification error: ", error);
+    }
+  } else if (currentWx.wdir <= 70 && currentWx.wdir >= 160 && onceFlag) {
+    try {
+      fetch(`http://${process.env.HOST_IP}/activerunway`, {
+        method: "POST",
+        body: `Runway 11 no longer in use 🛬 \n${currentWx.rawOb}`,
+      });
+      onceFlag = false;
     } catch (error) {
       console.log("Notification error: ", error);
     }
@@ -70,10 +87,26 @@ const getGameday = async () => {
       opponent = `AT ${game.teams.home.team.teamName.toUpperCase()}`;
     }
 
-    return `${opponent} ${gameTime}`;
+    todaysGame = `${opponent} ${gameTime}`;
   } else {
-    return "NO GAME TODAY";
+    todaysGame = "NO GAME TODAY";
   }
+  return todaysGame;
+};
+
+const getFlights = async () => {
+  const airportId = "KBED";
+  const res = await fetch(
+    `https://aeroapi.flightaware.com/aeroapi/airports/${airportId}/flights`,
+    {
+      headers: {
+        "x-apikey": process.env.FLIGHTAWARE_API_KEY,
+      },
+    }
+  );
+  const flights = await res.json();
+  todaysFlights = flights;
+  return flights;
 };
 
 app.get("/", async (_, res) => {
@@ -82,18 +115,29 @@ app.get("/", async (_, res) => {
 });
 
 app.get("/sox", async (_, res) => {
-  const game = await getGameday();
-  res.send(game);
+  res.send(todaysGame);
+});
+
+app.get("/flights", async (_, res) => {
+  if (todaysFlights) {
+    res.render("flights.ejs", {
+      arrivals: todaysFlights.scheduled_arrivals,
+      departures: todaysFlights.scheduled_departures,
+    });
+  } else {
+    res.send("Unable to get flights for the day. See logs.");
+  }
 });
 
 app.listen(port, () => {
-  console.log(`Weather app listening on port ${port}`);
+  console.log(`Metar app listening on port ${port}`);
 });
 
 cron.schedule("*/30 * * * *", async () => {
   await notifyRunwayInUseNtfy();
 });
 
-cron.schedule("0 6 * * *", async () => {
+cron.schedule("0 10 * * *", async () => {
   await notifyGameDayNtfy();
+  await getFlights();
 });

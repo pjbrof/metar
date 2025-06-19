@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <title>Flight Manifest</title>
+  </head>
+  <body>
+    <h1>Todays Flights:</h1>
+    <h2>Arrivals:</h2>
+    <ul>
+      <% arrivals.forEach(function(item,index){ %>
+      <li>
+        Ident: <%= item.ident %>, Aircraft: <%= item.aircraft_type %> - <%=
+        item.scheduled_on %>
+      </li>
+      <% }) %>
+    </ul>
+    <h2>Departures:</h2>
+    <ul>
+      <% departures.forEach(function(item,index){ %>
+      <li>
+        Ident: <%= item.ident %>, Aircraft: <%= item.aircraft_type %> - <%=
+        item.scheduled_off %>
+      </li>
+      <% }) %>
+    </ul>
+    <div id="root"></div>
+    <script>
+      window.__DATA__ = <%- JSON.stringify(arrivals) %>;
+    </script>
+  </body>
+</html>
