@@ -2,30 +2,69 @@
 <html lang="en-US">
   <head>
     <title>Flight Manifest</title>
+    <style>
+      body {
+        margin: 2rem;
+      }
+      table * {
+        border: 1px solid gray;
+        padding: 0.25rem;
+      }
+      .grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+      }
+    </style>
   </head>
   <body>
-    <h1>Todays Flights:</h1>
-    <h2>Arrivals:</h2>
-    <ul>
-      <% arrivals.forEach(function(item,index){ %>
-      <li>
-        Ident: <%= item.ident %>, Aircraft: <%= item.aircraft_type %> - <%=
-        item.scheduled_on %>
-      </li>
-      <% }) %>
-    </ul>
-    <h2>Departures:</h2>
-    <ul>
-      <% departures.forEach(function(item,index){ %>
-      <li>
-        Ident: <%= item.ident %>, Aircraft: <%= item.aircraft_type %> - <%=
-        item.scheduled_off %>
-      </li>
-      <% }) %>
-    </ul>
-    <div id="root"></div>
-    <script>
-      window.__DATA__ = <%- JSON.stringify(arrivals) %>;
-    </script>
+    <h1>Todays Flights (<%= day %>)</h1>
+    <div class="grid">
+      <div>
+        <h2>Arrivals:</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Ident</th>
+              <th>From</th>
+              <th>Aircraft</th>
+              <th>Time</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% arrivals.forEach(function(item,index){ %>
+            <tr>
+              <td><%= item.ident %></td>
+              <td><%= item.origin.city %></td>
+              <td><%= item.aircraft_type %></td>
+              <td><%= item.scheduled_on %></td>
+            </tr>
+            <% }) %>
+          </tbody>
+        </table>
+      </div>
+      <div>
+        <h2>Departures:</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Ident</th>
+              <th>Destination</th>
+              <th>Aircraft</th>
+              <th>Time</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% departures.forEach(function(item,index){ %>
+            <tr>
+              <td><%= item.ident %></td>
+              <td><%= item.destination.city %></td>
+              <td><%= item.aircraft_type %></td>
+              <td><%= item.scheduled_off %></td>
+            </tr>
+            <% }) %>
+          </tbody>
+        </table>
+      </div>
+    </div>
   </body>
 </html>
