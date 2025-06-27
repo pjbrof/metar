@@ -1243,5 +1243,15 @@
     "icaoCode": "YS11",
     "iataCode": "YS1",
     "description": "NAMC YS-11"
+  },
+  {
+    "icaoCode": "LJ35",
+    "iataCode": "LJ35",
+    "description": "Learjet 35"
+  },
+  {
+    "icaoCode": "LJ75",
+    "iataCode": "LJ75",
+    "description": "Learjet 75"
   }
 ]

@@ -2,7 +2,13 @@ const express = require("express");
 const router = express.Router();
 const dayjs = require("dayjs");
 
-let todaysFlights;
+// const exampleFlights = require("../examples/flightaware.json");
+const aircraft = require("../examples/aircraftIdent.json");
+
+const getAircraftDescription = (type) => {
+  const aIndex = aircraft.findIndex(({ icaoCode }) => type === icaoCode);
+  return aircraft[aIndex]?.description ?? type;
+};
 
 const formatFlightData = (data) => {
   const arrivals = data.scheduled_arrivals
@@ -10,6 +16,7 @@ const formatFlightData = (data) => {
     .map((item) => {
       return {
         ...item,
+        aircraft_type: getAircraftDescription(item.aircraft_type),
         scheduled_on: dayjs(item.scheduled_on).format("hh:mm a"),
       };
     });
@@ -18,6 +25,7 @@ const formatFlightData = (data) => {
     .map((item) => {
       return {
         ...item,
+        aircraft_type: getAircraftDescription(item.aircraft_type),
         scheduled_off: dayjs(item.scheduled_off).format("hh:mm a"),
       };
     });
@@ -27,6 +35,8 @@ const formatFlightData = (data) => {
     departures,
   };
 };
+
+let todaysFlights;
 
 const getFlights = async () => {
   const airportId = "KBED";

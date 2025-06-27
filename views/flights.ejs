@@ -2,9 +2,16 @@
 <html lang="en-US">
   <head>
     <title>Flight Manifest</title>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <style>
       body {
-        margin: 2rem;
+        margin: 1rem;
+
+        @media screen and (min-width: 1024px) {
+          margin: 2rem;
+        }
       }
       table * {
         border: 1px solid gray;
@@ -12,7 +19,11 @@
       }
       .grid {
         display: grid;
-        grid-template-columns: 1fr 1fr;
+        grid-template-columns: 1fr;
+
+        @media screen and (min-width: 1024px) {
+          grid-template-columns: 1fr 1fr;
+        }
       }
     </style>
   </head>
