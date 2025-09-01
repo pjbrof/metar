@@ -19,7 +19,7 @@ https://weather.cod.edu/notes/metar.html#time
 
 `docker build -t metar:latest .`
 
-`docker run -d -p 3000:3000 -e .env metar:latest`
+`docker run -d -p 80:3000 -e .env metar:latest`
 
 # Docker Private Repo
 
