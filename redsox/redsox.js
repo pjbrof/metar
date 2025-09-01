@@ -45,7 +45,13 @@ const notifyGameDayNtfy = async () => {
   }
 };
 
-router.get("/", (_, res) => res.send(todaysGame));
+router.get("/", (_, res) => {
+  if (todaysGame) {
+    res.send(todaysGame)
+  } else {
+    res.send('Unable to get game for today. See logs.')
+  }
+});
 
 module.exports = {
   notifyGameDayNtfy,

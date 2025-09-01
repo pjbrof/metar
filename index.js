@@ -10,10 +10,14 @@ const port = 3000;
 
 app
   .set("view engine", "ejs")
-  .use("/", weather.router)
+  .use("/metar", weather.router)
   .use("/flights", flights.router)
   .use("/sox", redsox.router)
   .listen(port, () => console.log(`Metar app listening on port ${port}`));
+
+app.get("/", (_, res) => {
+  res.render("home.ejs");
+});
 
 cron.schedule("*/30 * * * *", async () => {
   await weather.notifyRunwayInUseNtfy();
