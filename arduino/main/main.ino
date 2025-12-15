@@ -10,8 +10,13 @@
 
 #define PIN 2
 
+// WARNING!: IF YOU DO NOT SEE THE USBSERIAL-0001 ITS ALMOST ALWAYS THE USB CABLE
+// Board: DOIT ESP32 DEVKIT V1
+// Port: USBSerial-0001
+
+// 32x8 icever matrix
 Adafruit_NeoMatrix matrix = Adafruit_NeoMatrix(96, 8, PIN,
-  NEO_MATRIX_TOP     + NEO_MATRIX_LEFT +
+  NEO_MATRIX_BOTTOM     + NEO_MATRIX_RIGHT +
   NEO_MATRIX_COLUMNS + NEO_MATRIX_ZIGZAG,
   NEO_RGB            + NEO_KHZ800);
 
@@ -19,7 +24,7 @@ const char* ssid = "Winter Chill Gang";
 const char* password = "heavyhitters";
 
 // Would need WiFiClientSecure to call directly so using node server as a passthrough
-const char* serverName = "http://192.168.1.45:3000";
+const char* serverName = "http://192.168.1.36/metar";
 
 // the following variables are unsigned longs because the time, measured in
 // milliseconds, will quickly become a bigger number than can be stored in an int.
