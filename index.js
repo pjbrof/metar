@@ -19,6 +19,9 @@ app.get("/", (_, res) => {
   res.render("home.ejs");
 });
 
+redsox.getGameday();
+flights.getFlights();
+
 cron.schedule("*/30 * * * *", async () => {
   await weather.notifyRunwayInUseNtfy();
 });
