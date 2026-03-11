@@ -54,6 +54,7 @@ router.get("/", (_, res) => {
 });
 
 module.exports = {
+  getGameday,
   notifyGameDayNtfy,
   router,
 };
