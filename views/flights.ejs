@@ -39,6 +39,7 @@
             <tr>
               <th>Ident</th>
               <th>From</th>
+              <th>Owner</th>
               <th>Aircraft</th>
               <th>Time</th>
             </tr>
@@ -48,6 +49,7 @@
             <tr>
               <td><%= item.ident %></td>
               <td><%= item.origin.city %></td>
+              <td><%= item.aircraft_owner %></td>
               <td><a href="https://google.com/images?q=<%= item.aircraft_type %> aircraft" target="_blank" style="border: 0;"><%= item.aircraft_type %></a></td>
               <td><%= item.scheduled_on %></td>
             </tr>
@@ -61,6 +63,7 @@
           <thead>
             <tr>
               <th>Ident</th>
+              <th>Owner</th>
               <th>Destination</th>
               <th>Aircraft</th>
               <th>Time</th>
@@ -70,6 +73,7 @@
             <% departures.forEach(function(item,index){ %>
             <tr>
               <td><%= item.ident %></td>
+              <td><%= item.aircraft_owner %></td>
               <td><%= item.destination.city %></td>
               <td><a href="https://google.com/images?q=<%= item.aircraft_type %> aircraft" target="_blank" style="border: 0;"><%= item.aircraft_type %></a></td>
               <td><%= item.scheduled_off %></td>
